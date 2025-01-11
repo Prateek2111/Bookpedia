@@ -2,8 +2,11 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Login from "./Login";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/Authprovider";
+import Logout from "./Logout";
 
 const Navbar = () => {
+  const [authUser, setAuthUser] = useAuth();
 
   const [sticky, setSticky] = useState(false);
   useEffect(() => {
@@ -76,7 +79,7 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navItems}</ul>
         </div>
-        <div className="hidden md:block">
+        {/* <div className="hidden md:block">
           <label className="px-3 py-2 border rounded-md flex items-center">
             <input
               type="text"
@@ -96,7 +99,7 @@ const Navbar = () => {
               />
             </svg>
           </label>
-        </div>
+        </div> */}
         <label className="swap swap-rotate">
           {/* this hidden checkbox controls the state */}
           <input
@@ -104,18 +107,28 @@ const Navbar = () => {
             className="theme-controller"
             value="synthwave"
           />
-
         </label>
-        <div>
-          <a className="bg-zinc-400 px-3 py-2 rounded-md text-black hover:bg-zinc-500 duration-100 cursor-pointer"
-          onClick={() => {
-            document.getElementById("my_modal_3").showModal();
-          }}
-          >
-            Login
-          </a>
-          <Login />
-        </div>
+        {authUser ? (
+          <div className="text-white hidden md:block whitespace-nowrap">
+            <span>Hi, {authUser.fullname} 🖐️</span>
+          </div>
+        ) : null}
+
+        {authUser ? (
+          <Logout />
+        ) : (
+          <div>
+            <a
+              className="bg-zinc-400 px-3 py-2 rounded-md text-black hover:bg-zinc-500 duration-100 cursor-pointer"
+              onClick={() => {
+                document.getElementById("my_modal_3").showModal();
+              }}
+            >
+              Login
+            </a>
+            <Login />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,8 +1,23 @@
 import React from "react";
 import Cards from "./Cards";
-import list from "../assets/list.json";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const Course = () => {
+  const [book, setBook] = useState([]);
+
+  useEffect(() => {
+    const getBook = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/books");
+        console.log(res.data);
+        setBook(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBook();
+  }, []);
 
   const handleScroll = () => {
     // Scroll to the element with ID "target-section"
@@ -37,7 +52,7 @@ const Course = () => {
         className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-10"
         id="target-section"
       >
-        {list.map((item) => (
+        {book.map((item) => (
           <Cards item={item} key={item.id} />
         ))}
       </div>
